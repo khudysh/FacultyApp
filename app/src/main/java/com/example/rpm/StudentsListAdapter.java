@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.rpm.dataClasses.Students;
+import com.example.rpm.modelsDB.Students;
 
 import java.util.List;
 
@@ -31,11 +31,11 @@ public class StudentsListAdapter extends ArrayAdapter<Students> {
 
         View view = inflater.inflate(this.layout, parent, false);
 
-        TextView nameView = view.findViewById(R.id.emp_first_name_text_view);
+        TextView nameView = view.findViewById(R.id.std_first_name_text_view);
 
-        TextView surnameView = view.findViewById(R.id.emp_second_name_text_view);
+        TextView surnameView = view.findViewById(R.id.std_second_name_text_view);
 
-        TextView postView = view.findViewById(R.id.emp_position_text_view);
+        TextView postView = view.findViewById(R.id.std_position_text_view);
 
         setViewListeners(nameView, surnameView, postView, position);
 

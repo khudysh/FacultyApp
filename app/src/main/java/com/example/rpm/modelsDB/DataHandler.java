@@ -1,4 +1,4 @@
-package com.example.rpm.dataClasses;
+package com.example.rpm.modelsDB;
 
 import android.content.Context;
 
@@ -8,15 +8,15 @@ public class DataHandler {
 
     private AppDatabase db;
     private FacultyDao facultyDao;
-    private DirectionDao departmentDao;
+    private DirectionDao directionDao;
     private StudentsDao studentsDao;
 
     public void createOrConnectToDB(Context context){
         db = AppDatabase.getInstance(context);
 
         facultyDao = db.facultyDao();
-        departmentDao = db.departmentDao();
-        studentsDao = db.employeeDao();
+        directionDao = db.directionDao();
+        studentsDao = db.studentDao();
     }
     public AppDatabase getDB(){
         return db;
@@ -24,7 +24,6 @@ public class DataHandler {
 
 
     //Faculty
-
     public void addFaculty(String name){
         Faculty faculty = new Faculty();
         faculty.name = name;
@@ -84,65 +83,65 @@ public class DataHandler {
     }
 
 
-    //Department
+    //Direction
 
-    public void addDepartment(Direction direction){
+    public void addDirection(Direction direction){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                departmentDao.insertAll(direction);
+                directionDao.insertAll(direction);
             }
         };
         Thread thread = new Thread(runnable);
         thread.start();
     }
-    public void addDepartment(int id, String name, int facultyId){
-        Direction dep = new Direction();
-        dep.id = id;
-        dep.name = name;
-        dep.facultyId = facultyId;
+    public void addDirection(int id, String name, int facultyId){
+        Direction dir = new Direction();
+        dir.id = id;
+        dir.name = name;
+        dir.facultyId = facultyId;
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                departmentDao.insertAll(dep);
+                directionDao.insertAll(dir);
             }
         };
         Thread thread = new Thread(runnable);
         thread.start();
     }
-    public void addDepartment(String name, int facultyId){
-        Direction dep = new Direction();
-        dep.name = name;
-        dep.facultyId = facultyId;
+    public void addDirection(String name, int facultyId){
+        Direction dir = new Direction();
+        dir.name = name;
+        dir.facultyId = facultyId;
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                List<Direction> deps = departmentDao.getAll();
-                dep.id = deps.size();
-                departmentDao.insertAll(dep);
+                List<Direction> direcs = directionDao.getAll();
+                dir.id = direcs.size();
+                directionDao.insertAll(dir);
             }
         };
         Thread thread = new Thread(runnable);
         thread.start();
     }
-    public void deleteDepartment(int id){
+    public void deleteDirection(int id){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Direction dep = departmentDao.getOneById(id);
-                departmentDao.delete(dep);
+                Direction dir = directionDao.getOneById(id);
+                directionDao.delete(dir);
             }
         };
         Thread thread = new Thread(runnable);
         thread.start();
     }
-    public void updateDepartment(int id, String newName){
+    public void updateDirection(int id, String newName){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Direction dep = departmentDao.getOneById(id);
-                dep.name = newName;
-                departmentDao.update(dep);
+                Direction dir = directionDao.getOneById(id);
+                dir.name = newName;
+                directionDao.update(dir);
             }
         };
         Thread thread = new Thread(runnable);
@@ -150,8 +149,8 @@ public class DataHandler {
     }
 
 
-    //Employee
-    public void addEmployee(Students students){
+    //Student
+    public void addStudent(Students students){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -161,7 +160,7 @@ public class DataHandler {
         Thread thread = new Thread(runnable);
         thread.start();
     }
-    public void updateEmployee(Students students){
+    public void updateStudent(Students students){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -171,7 +170,7 @@ public class DataHandler {
         Thread thread = new Thread(runnable);
         thread.start();
     }
-    public void deleteEmployee(Students students){
+    public void deleteStudent(Students students){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {

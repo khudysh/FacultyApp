@@ -1,4 +1,4 @@
-package com.example.rpm.dataClasses;
+package com.example.rpm.modelsDB;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

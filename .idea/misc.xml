@@ -11,16 +11,23 @@
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/drawable/side_nav_bar.xml" value="0.179" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/activity_emloyees_list.xml" value="0.18085106382978725" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/activity_main.xml" value="0.18085106382978725" />
+        <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/activity_students_list.xml" value="0.16185410334346503" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/app_bar_main.xml" value="0.18085106382978725" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/content_main.xml" value="0.18085106382978725" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/employee_element_listview.xml" value="0.18085106382978725" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/fragment_gallery.xml" value="0.18085106382978725" />
+        <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/fragment_home.xml" value="0.18085106382978725" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/input_department.xml" value="0.25" />
+        <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/input_direction.xml" value="0.16185410334346503" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/input_employee.xml" value="0.33" />
+        <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/input_new_faculty_layout.xml" value="0.16185410334346503" />
+        <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/input_student.xml" value="0.16185410334346503" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/nav_header_main.xml" value="0.14266304347826086" />
+        <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/layout/students_element_listview.xml" value="0.16185410334346503" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/menu/activity_main_drawer.xml" value="0.2163265306122449" />
         <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/menu/employees_list_menu.xml" value="0.14722222222222223" />
-        <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/menu/main.xml" value="0.14722222222222223" />
+        <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/menu/main.xml" value="0.33" />
+        <entry key="..\:/Users/Eugene/Desktop/RPM/app/src/main/res/menu/students_list_menu.xml" value="0.25" />
       </map>
     </option>
   </component>

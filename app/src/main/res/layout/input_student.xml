@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/input_emp_first_name"
+        android:id="@+id/input_std_first_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -13,7 +13,7 @@
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/input_emp_second_name"
+        android:id="@+id/input_std_second_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -21,7 +21,7 @@
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/input_emp_post"
+        android:id="@+id/input_std_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -34,7 +34,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/add_emp_accept"
+            android:id="@+id/add_std_accept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -43,7 +43,7 @@
             android:text="Добавить" />
 
         <Button
-            android:id="@+id/add_emp_decline"
+            android:id="@+id/add_std_decline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -59,7 +59,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/add_emp_delete"
+            android:id="@+id/add_std_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"

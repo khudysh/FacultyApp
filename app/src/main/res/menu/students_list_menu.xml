@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/change_department_name"
+        android:id="@+id/change_direction_name"
         android:title="Изменить название" />
     <item
-        android:id="@+id/delete_department"
+        android:id="@+id/delete_direction"
         android:title="Удалить направление" />
     <item
-        android:id="@+id/add_new_employee"
+        android:id="@+id/add_new_student"
         android:title="Добавить студента" />
 </menu>

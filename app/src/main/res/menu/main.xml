@@ -3,16 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/add_faculty"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@android:drawable/ic_menu_add"
         android:title="@string/add_faculty_str"
         app:showAsAction="always" />
     <item
-        android:id="@+id/refresh_page"
-        android:icon="@android:drawable/stat_notify_sync"
-        android:title="Item"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/add_department"
+        android:id="@+id/add_direction"
         android:title="@string/string_add_dep_str"
         android:visible="false" />
     <item

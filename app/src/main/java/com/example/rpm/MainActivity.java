@@ -22,78 +22,39 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.ui.AppBarConfiguration;
 
 import com.example.rpm.controllers.ApiService;
-import com.example.rpm.dataClasses.DataHandler;
-import com.example.rpm.dataClasses.Direction;
-import com.example.rpm.dataClasses.Students;
-import com.example.rpm.dataClasses.Faculty;
+import com.example.rpm.modelsDB.DataHandler;
+import com.example.rpm.modelsDB.Direction;
+import com.example.rpm.modelsDB.Students;
+import com.example.rpm.modelsDB.Faculty;
 import com.example.rpm.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
-import com.google.gson.*;
 
 @RequiresApi(api = Build.VERSION_CODES.P)
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    Gson g = new Gson();
 
-
-    private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
 
     private NavigationView navigationView;
-    private ListView departmentsList;
+    private ListView directionsList;
     private Menu mainMenu;
 
     private DataHandler dataHandler = new DataHandler();
     private int currentFacultyId;
-    private ApiService apiService = new ApiService();
+
     private ArrayList<Faculty> allFaculties;
     private ArrayList<Direction> allDirections;
     private ArrayList<Direction> currentFacultyDirections;
     private ArrayList<Students> allStudents;
-
-
-
-//    public void executePerson() throws Exception {
-//        final OkHttpClient client = new OkHttpClient();
-//
-//        Request request = new Request.Builder()
-//                .url("http://94.103.188.48/FacultyApp/students.php")
-//                .build();
-//        Response response = client.newCall(request).executePerson();
-//        if(response.isSuccessful()){
-//            System.out.println(response.code());
-//            Gson g = new Gson();
-//            JSONArray json = new JSONArray(response.body().string());
-//            //Log.d("MyLog",""+);
-//            for (int i=0; i < json.length(); i++) {
-//                Person person = g.fromJson(json.getJSONObject(i).toString(), Person.class);
-//                allPerson.add(person);
-//                Log.d("MyLogi",person.toString());
-//            }
-//            Log.d("MyLog",response.body().string());
-//        }
-//    }
+    private ApiService apiService = new ApiService();
 
     //Initializing
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    apiService.executePerson();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -109,14 +70,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initializeValues(){
         currentFacultyId = -1;
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        departmentsList = (ListView) findViewById(R.id.departmentsListView);
-        departmentsList.setOnItemClickListener((parent, view, position, id)->{
+        directionsList = (ListView) findViewById(R.id.directionsListView);
+        directionsList.setOnItemClickListener((parent, view, position, id)->{
             Intent intent = new Intent(MainActivity.this, StudentsListActivity.class);
-            int depId = currentFacultyDirections.get(position).id;
+            int dirId = currentFacultyDirections.get(position).id;
             String title = currentFacultyDirections.get(position).name;
             String code = currentFacultyDirections.get(position).code;
             String profile = currentFacultyDirections.get(position).profile;
-            intent.putExtra("departmentId", depId);
+            intent.putExtra("directionId", dirId);
             intent.putExtra("title", title);
             intent.putExtra("code", code);
             intent.putExtra("profile", profile);
@@ -125,28 +86,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         dataHandler.createOrConnectToDB(getApplicationContext());
     }
+
     private void setListViewAdapter(){
         ArrayList<String> str = new ArrayList<>();
         for(Direction direction : currentFacultyDirections){
             int amount = 0;
-            for(Students emp: allStudents){
-                if(emp.departmentId == direction.id) amount++;
+            for(Students student: allStudents){
+                if(student.departmentId == direction.id) amount++;
             }
             str.add(direction.code + ' ' + direction.name + ' ' + direction.profile + " (Студентов: " + amount + ")");
         }
-        departmentsList.setAdapter(
+        directionsList.setAdapter(
                 new ArrayAdapter<String>(this,
                         android.R.layout.simple_list_item_1,
                         str)
         );
     }
+
     private void getDatabaseInfo(){
         GetFaculties getFaculties = new GetFaculties();
         getFaculties.execute();
-        GetDepartments getDepartments = new GetDepartments();
-        getDepartments.execute();
-        GetEmployees getEmployees = new GetEmployees();
-        getEmployees.execute();
+        GetDirections getDirections = new GetDirections();
+        getDirections.execute();
+        GetStudents getStudents = new GetStudents();
+        getStudents.execute();
     }
 
     @Override public void onBackPressed() {
@@ -157,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if(currentFacultyId != -1){
             currentFacultyId = -1;
-            departmentsList.setAdapter(
+            directionsList.setAdapter(
                     new ArrayAdapter<String>(this,
                             android.R.layout.simple_list_item_1)
             );
@@ -175,10 +138,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
-            case R.id.refresh_page:{
-                getDatabaseInfo();
-                return true;
-            }
             case R.id.add_faculty:{
                 addOrChangeFaculty(true);
                 return true;
@@ -187,19 +146,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 addOrChangeFaculty(false);
                 return true;
             }
-            case R.id.add_department:{
+            case R.id.add_direction:{
                 AlertDialog inputDialog = new AlertDialog.Builder(MainActivity.this).create();
-                View vv = (LinearLayout) getLayoutInflater().inflate(R.layout.input_department, null);
+                View vv = (LinearLayout) getLayoutInflater().inflate(R.layout.input_direction, null);
                 inputDialog.setView(vv);
                 inputDialog.setCancelable(true);
 
-                ((Button) vv.findViewById(R.id.add_department_accept)).setOnClickListener(v->{
+                ((Button) vv.findViewById(R.id.add_direction_accept)).setOnClickListener(v->{
 
-                    String newCode = ((EditText) vv.findViewById(R.id.input_department_code)).getText().toString();
+                    String newCode = ((EditText) vv.findViewById(R.id.input_direction_code)).getText().toString();
                     newCode = newCode.trim();
-                    String newName = ((EditText) vv.findViewById(R.id.input_department_name)).getText().toString();
+                    String newName = ((EditText) vv.findViewById(R.id.input_direction_name)).getText().toString();
                     newName = newName.trim();
-                    String newProfile = ((EditText) vv.findViewById(R.id.input_department_profile)).getText().toString();
+                    String newProfile = ((EditText) vv.findViewById(R.id.input_direction_profile)).getText().toString();
                     newProfile = newProfile.trim();
 
                     if(newCode.isEmpty()){
@@ -222,19 +181,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
 
                     Direction direction = new Direction();
-                    direction.name = ((EditText) vv.findViewById(R.id.input_department_name)).getText().toString();
-                    direction.code = ((EditText) vv.findViewById(R.id.input_department_code)).getText().toString();
-                    direction.profile = ((EditText) vv.findViewById(R.id.input_department_profile)).getText().toString();
+                    direction.name = ((EditText) vv.findViewById(R.id.input_direction_name)).getText().toString();
+                    direction.code = ((EditText) vv.findViewById(R.id.input_direction_code)).getText().toString();
+                    direction.profile = ((EditText) vv.findViewById(R.id.input_direction_profile)).getText().toString();
                     direction.facultyId = currentFacultyId;
 
-                    dataHandler.addDepartment(direction);
+                    dataHandler.addDirection(direction);
                     sleep(500);
-                    GetDepartments getDepartments = new GetDepartments();
-                    getDepartments.execute();
-
+                    GetDirections getDirections = new GetDirections();
+                    getDirections.execute();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                apiService.insertFaculty(direction.name);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
                     inputDialog.cancel();
                 });
-                ((Button) vv.findViewById(R.id.add_department_decline)).setOnClickListener(v->{
+                ((Button) vv.findViewById(R.id.add_direction_decline)).setOnClickListener(v->{
                     inputDialog.cancel();
                 });
                 inputDialog.show();
@@ -254,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void changeMenuOptions(boolean visible){
-        MenuItem addDepItem = mainMenu.findItem(R.id.add_department);
+        MenuItem addDepItem = mainMenu.findItem(R.id.add_direction);
         MenuItem change = mainMenu.findItem(R.id.change_faculty_name);
         MenuItem deleteFaculty = mainMenu.findItem(R.id.delete_faculty);
 
@@ -289,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             if(createNew){
                 dataHandler.addFaculty(editFacultyName.getText().toString());
+
             }
             else{
                 setTitle(editFacultyName.getText().toString());
@@ -309,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Navigation Drawer
 
-    private void createNavigationMenu(){
+    private void createNavigationMenu() {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
@@ -339,12 +308,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         changeMenuOptions(true);
         currentFacultyId = item.getItemId();
         setTitle(Faculty.findFacultyById(allFaculties, currentFacultyId).name);
-
+        getDatabaseInfo();
         if(allDirections.size() > 0){
-            searchForFacultyDepartments();
+            searchForFacultyDirections();
             setListViewAdapter();
         }
+
         DrawerLayout dl = (DrawerLayout)findViewById(R.id.drawer_layout);
+
         if(dl.isDrawerOpen(GravityCompat.START)){
             dl.closeDrawer(GravityCompat.START);
         }
@@ -358,14 +329,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
     }
-    private void searchForFacultyDepartments(){
+
+    private void searchForFacultyDirections(){
         currentFacultyDirections = new ArrayList<>();
         for(Direction direction : allDirections){
             if(direction.facultyId == currentFacultyId) currentFacultyDirections.add(direction);
         }
     }
-
-
 
     class GetFaculties extends AsyncTask<Void, Void, ArrayList<Faculty>> {
         @Override
@@ -380,16 +350,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             updateNavigationMenuValues();
         }
     }
-    class GetDepartments extends AsyncTask<Void, Void, ArrayList<Direction>> {
+
+    class GetDirections extends AsyncTask<Void, Void, ArrayList<Direction>> {
         @Override
         protected ArrayList<Direction> doInBackground(Void... unused) {
-            return (ArrayList<Direction>) dataHandler.getDB().departmentDao().getAll();
+            return (ArrayList<Direction>) dataHandler.getDB().directionDao().getAll();
         }
         @Override
         protected void onPostExecute(ArrayList<Direction> directionArrayList) {
             allDirections = directionArrayList;
             if(currentFacultyId != -1){
-                searchForFacultyDepartments();
+                searchForFacultyDirections();
                 setListViewAdapter();
                 //((ArrayAdapter) departmentsList.getAdapter()).notifyDataSetChanged();
             }
@@ -397,10 +368,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .show();
         }
     }
-    class GetEmployees extends AsyncTask<Void, Void, ArrayList<Students>> {
+
+    class GetStudents extends AsyncTask<Void, Void, ArrayList<Students>> {
         @Override
         protected ArrayList<Students> doInBackground(Void... unused) {
-            return (ArrayList<Students>) dataHandler.getDB().employeeDao().getAll();
+            return (ArrayList<Students>) dataHandler.getDB().studentDao().getAll();
         }
         @Override
         protected void onPostExecute(ArrayList<Students> studentsArrayList) {

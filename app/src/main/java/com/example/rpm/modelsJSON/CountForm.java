@@ -1,8 +1,8 @@
-package com.example.rpm.models;
+package com.example.rpm.modelsJSON;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Person {
+public class CountForm {
 
     @SerializedName("title")
     public String title;

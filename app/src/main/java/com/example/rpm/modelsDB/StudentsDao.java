@@ -1,4 +1,4 @@
-package com.example.rpm.dataClasses;
+package com.example.rpm.modelsDB;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -14,7 +14,7 @@ public interface StudentsDao {
     List<Students> getAll();
 
     @Query("SELECT * FROM Students WHERE departmentId IS :departmentId")
-    List<Students> getDepartmentEmployees(int departmentId);
+    List<Students> getDirectionStudents(int departmentId);
 
     @Insert
     void insertAll(Students... students);

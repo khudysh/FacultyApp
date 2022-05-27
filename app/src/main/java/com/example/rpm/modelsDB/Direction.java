@@ -1,4 +1,4 @@
-package com.example.rpm.dataClasses;
+package com.example.rpm.modelsDB;
 
 import static androidx.room.ForeignKey.CASCADE;
 
